@@ -1,0 +1,55 @@
+﻿version: "3.7"
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/live/appname.pitdigital.nl/fullchain.pem:/etc/ssl/certs/fullchain.pem
+      - /etc/letsencrypt/live/appname.pitdigital.nl/privkey.pem:/etc/ssl/private/privkey.pem
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
+
+  api:
+    image: ghcr.io/pit-digital/appname/api:latest
+    env_file: .env
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 20s
+      restart_policy:
+        condition: on-failure
+
+  web:
+    image: ghcr.io/pit-digital/appname/web:latest
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 20s
+      restart_policy:
+        condition: on-failure
+
+  website:
+    image: ghcr.io/pit-digital/appname/website:latest
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 20s
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  mongodb_data:
+  portainer_data:

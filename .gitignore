@@ -1,0 +1,74 @@
+# System files
+.DS_Store
+
+# Environment configuration files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build outputs
+dist/
+build/
+out/
+release/
+
+# Compiled static assets
+public/build/
+
+# Angular build artifacts
+/frontend/dist/
+/frontend/tmp/
+/frontend/out-tsc/
+
+# Angular cache
+/frontend/.angular/cache/
+
+# NestJS build artifacts
+/api/dist/
+/api/build/
+
+# Svelte build artifacts
+/website/build/
+/website/public/build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+
+# Local development files
+docker-compose.override.yml
+*local*
+
+# Security files
+*.pem
+*.crt
+*.key
+*.cert
+
+# Specific files
+.dockerignore
+*.lock
+yarn.lock
+package-lock.json
+
+# IDE-specific files
+.idea/
+*.iml
+.classpath
+.project
+.settings/

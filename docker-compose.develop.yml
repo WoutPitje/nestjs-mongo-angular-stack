@@ -1,0 +1,82 @@
+version: "3"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_development
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.develop.conf:/etc/nginx/nginx.conf
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo
+    command: mongod --auth
+    environment:
+      - MONGO_INITDB_DATABASE=appname
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    ports:
+      - '27017-27019:27017-27019'
+    volumes:
+      - mongodbdata:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  api:
+    build:
+      context: API
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./API:/app
+      - /app/node_modules
+    ports:
+      - "3001:3001"
+      - "9229:9229"
+    environment:
+      - JWT_SECRET=838981e0bcf8545a63f6022721930eb906e8e52b337adcc9a01dcf92b186a3fe
+      - DATABASE_URI=mongodb://user:password@mongodb:27017/appname
+      - NODE_ENV=development
+    depends_on:
+      - mongodb
+
+  web:
+    working_dir: /app
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - api
+
+  website:
+    working_dir: /app
+    build:
+      context: ./Website
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Website:/app
+      - /app/node_modules
+
+  portainer:
+    image: portainer/portainer-ce
+    ports:
+      - "9000:9000"
+      - "8000:8000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "portainer_data:/data"
+    restart: always
+
+volumes:
+  portainer_data:
+  mongodbdata:
+    driver: local

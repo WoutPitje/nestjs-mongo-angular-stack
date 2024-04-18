@@ -1,0 +1,57 @@
+@defer {
+<div
+	class="w-full h-dvh flex justify-center items-center card shadow-xl"
+>
+	<div
+		class="p-8 flex flex-col gap-4 items-center card relative"
+	>
+		<h1
+			class="text-2xl font-bold"
+		>
+			Login
+		</h1>
+
+		<div>
+			<label
+				class="label font-bold"
+				>Email</label
+			>
+			<input
+				class="input input-bordered w-full min-w-96"
+				type="email"
+				[(ngModel)]="email"
+				(keyup.enter)="
+					login()
+				"
+			/>
+			<label
+				class="label font-bold"
+				>Password</label
+			>
+			<input
+				type="password"
+				class="input input-bordered w-full"
+				[(ngModel)]="password"
+				(keyup.enter)="
+					login()
+				"
+			/>
+		</div>
+		<button
+			class="btn btn-primary w-full"
+			(click)="login()"
+			[disabled]="loading()"
+		>
+			<span
+				*ngIf="loading()"
+				class="loading loading-spinner"
+			></span>
+			Login
+		</button>
+		<app-error-message
+			class="w-full"
+			[errors]="errors()"
+		></app-error-message>
+	</div>
+</div>
+}

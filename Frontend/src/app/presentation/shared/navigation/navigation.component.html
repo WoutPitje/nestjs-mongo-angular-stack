@@ -1,0 +1,48 @@
+<div class="navbar pr-4 pl-4">
+	<div class="flex-1">
+		<a
+			*ngIf="company()"
+			class="text-xl font-bold"
+			>Appname
+			{{
+				company()?.value?.name
+			}}</a
+		>
+		<div
+			*ngIf="!company()"
+			class="skeleton h-8 w-28"
+		></div>
+	</div>
+	<div
+		class="flex-none gap-2"
+	>
+		<div
+			class="dropdown dropdown-end"
+		>
+			<div
+				class="avatar placeholder"
+				tabindex="0"
+				role="button"
+			>
+				<div
+					class="btn bg-neutral text-neutral-content rounded-full w-12"
+				>
+					<span>{{
+						initials()
+					}}</span>
+				</div>
+			</div>
+			<ul
+				tabindex="0"
+				class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+			>
+				<li>
+					<a
+						(click)="logout()"
+						>Logout</a
+					>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
