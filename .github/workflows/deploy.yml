@@ -1,0 +1,88 @@
+name: Build and Deploy Application
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build_api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push API Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./api
+          file: ./api/Dockerfile
+          push: true
+          tags: ghcr.io/pit-digital/appname/api:latest
+
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Web Frontend Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Frontend
+          file: ./Frontend/Dockerfile
+          push: true
+          tags: ghcr.io/pit-digital/appname/web:latest
+
+  build_website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Website Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Website
+          file: ./Website/Dockerfile
+          push: true
+          tags: ghcr.io/pit-digital/appname/website:latest
+
+  deploy:
+    needs: [build_website, build_frontend, build_api] # Depends on the last build job to ensure all builds are complete
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "Deploying application..."
+            cd apps/appname
+            git pull
+            sh deploy.sh
