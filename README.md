@@ -36,5 +36,3 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 ## Contact
 For any further queries, reach out to [YourOwner] at email@yourdomain.com.
-
-This version simplifies the setup by focusing on Docker as the primary dependency, aligning with your requirement to use `dev.sh` which leverages Docker Compose.
