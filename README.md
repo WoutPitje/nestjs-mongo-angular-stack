@@ -1,4 +1,24 @@
-## Instructions
+# [yourappname]
 
-replace all: appname -> [yourappname]
-replace all: Appname -> [yourappname]
+Welcome to the `[yourappname]` project, a comprehensive solution developed by `[YourOwner]`. This application utilizes NestJS for the backend, Angular for the frontend, and Svelte for additional features, all containerized using Docker. This README outlines the process to set up and run the development environment using Docker Compose.
+
+## Getting Started
+
+Follow these steps to set up your development environment using Docker. This approach ensures that all dependencies and services are correctly configured and isolated.
+
+### Prerequisites
+
+The only prerequisite is Docker:
+- [Install Docker](https://docs.docker.com/get-docker/)
+- [Install Docker Compose](https://docs.docker.com/compose/install/) if it is not included in your Docker installation.
+
+### Installation and Running
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/[youronwer]/[yourappname].git
+   cd [yourappname]
+2. Start the development environment:
+   ./dev.sh
+
+This script will use docker-compose to build and start all the necessary containers for the backend, frontend, and any associated services. You can access the application as specified in the output of the docker-compose logs.
